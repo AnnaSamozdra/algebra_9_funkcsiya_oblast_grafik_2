@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MATH QUEST 09 — Функція та її графік</title>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root{--bg:#090d20;--panel:#141b37;--panel2:#1b2548;--cyan:#54e6ff;--pink:#ff62c0;--gold:#ffd66b;--text:#f4f7ff;--muted:#b8c4e8;--green:#6df0b0}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#26306a 0,transparent 35%),radial-gradient(circle at 90% 20%,#431c63 0,transparent 30%),var(--bg);color:var(--text);font-family:Arial,sans-serif;line-height:1.5}
+header{padding:24px 5vw 18px;border-bottom:1px solid #39446e;background:#090d20cc;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+.brand{color:var(--cyan);font-weight:900;letter-spacing:3px;font-size:13px}.top{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}h1{font-size:clamp(24px,4vw,42px);margin:5px 0 0;line-height:1.1}.subtitle{color:var(--muted);margin-top:8px}
+.progress-wrap{height:8px;background:#283153;border-radius:20px;overflow:hidden;margin-top:17px}.progress{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--pink));transition:.4s}
+main{max-width:1100px;margin:auto;padding:28px 18px 70px}.hero,.panel{background:linear-gradient(145deg,#182143f2,#111832f2);border:1px solid #3b4778;border-radius:22px;padding:24px;box-shadow:0 14px 40px #0005;margin-bottom:22px}
+.hero{display:grid;grid-template-columns:1.4fr .8fr;gap:22px;align-items:center}.eyebrow{color:var(--gold);font-weight:bold;letter-spacing:1px;font-size:13px}.hero h2{font-size:clamp(25px,4vw,38px);margin:8px 0}.hero p{color:var(--muted)}.hero-art{font-size:90px;text-align:center;filter:drop-shadow(0 0 20px #54e6ff88)}
+h2.section{font-size:25px;margin:0 0 8px}h3{margin:8px 0}.muted{color:var(--muted)}.pill{display:inline-block;border:1px solid #59699f;border-radius:30px;padding:5px 11px;color:var(--cyan);font-size:12px;margin:4px}
+button{border:0;border-radius:12px;padding:12px 18px;background:linear-gradient(90deg,#26c8ed,#7b73ff);color:#071326;font-weight:800;cursor:pointer;font-size:15px}button.secondary{background:#28365f;color:var(--text);border:1px solid #59699f}button:disabled{opacity:.5;cursor:not-allowed}
+input{background:#0c1430;border:1px solid #536394;border-radius:10px;padding:12px;color:white;font-size:16px;max-width:100%}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.stage{display:none}.stage.active{display:block;animation:fade .35s}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.tile{background:#202b50;border:1px solid #455487;border-radius:16px;padding:17px}.tile strong{color:var(--cyan)}.q{background:#101a37;border:1px solid #384976;border-radius:15px;padding:17px;margin:14px 0}.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:9px;margin-top:12px}.opt{background:#253257;color:white;border:1px solid #4b5c91;text-align:left}.opt.correct{background:#145b48;border-color:var(--green)}.opt.wrong{background:#642d51;border-color:var(--pink)}.feedback{min-height:24px;color:var(--gold);font-weight:bold;margin-top:9px}
+iframe{width:100%;border:0;border-radius:14px;background:white;min-height:430px}.embed-wrap{overflow:hidden;border-radius:14px;background:#fff}.embed-note{font-size:13px;color:var(--muted);margin-top:10px}
+canvas{width:100%;max-width:760px;height:auto;background:#f9fbff;border-radius:14px;display:block;margin:12px auto;touch-action:manipulation}.graph-controls{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
+.score{font-size:26px;color:var(--gold);font-weight:900}.finish{text-align:center;padding:30px}.finish .medal{font-size:78px}
+footer{text-align:center;color:#8190bd;padding:20px;font-size:12px}
+@media(max-width:700px){.hero{grid-template-columns:1fr}.hero-art{font-size:60px}header{position:relative}.panel,.hero{padding:18px}}
+
+.mini-q{margin:12px 0;padding:14px;border:1px solid #394b79;border-radius:14px;background:#17213f}
+#graph{display:block;width:min(100%,600px);height:auto;aspect-ratio:1/1;background:#f9fbff;border-radius:14px;margin:18px auto}
+</style>
+</head>
+<body>
+<header>
+ <div class="top"><div><div class="brand">MATH QUEST 09 · МАТЕМАТИЧНА МІСІЯ</div><h1>Функція. Графік функції</h1></div><div class="row"><span class="pill" id="playerTag">Гравець: дослідник</span><span class="pill">6 місій</span></div></div>
+ <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+</header>
+<main>
+<section class="hero" id="intro">
+ <div><div class="eyebrow">МІСІЯ 08 · ДОСЛІДЖУЄМО ЗАЛЕЖНОСТІ</div><h2>Відкрий секрети функцій!</h2><p>Пригадай матеріал попереднього уроку, пройди математичні випробування, побудуй власний графік і заверши місію фінальною битвою.</p>
+ <div class="row"><input id="playerName" placeholder="Введи своє ім'я" maxlength="22"><button type="button" id="startGameBtn" onclick="(function(){var name=document.getElementById('playerName').value.trim()||'дослідник';document.getElementById('playerTag').textContent='Гравець: '+name;document.getElementById('intro').style.display='none';document.querySelectorAll('.stage').forEach(function(el){el.classList.remove('active')});document.getElementById('s1').classList.add('active');document.getElementById('progress').style.width='0%';document.getElementById('s1').scrollIntoView({behavior:'auto',block:'start'});})();">Розпочати місію →</button></div></div>
+ <div class="hero-art">🚀📈</div>
+</section>
+
+<section class="stage panel" id="s1">
+ <div class="eyebrow">МІСІЯ 1 · ПОВТОРЕННЯ</div><h2 class="section">Пригадай попередній урок</h2>
+ <p class="muted">Виконай вправу Wordwall. Після завершення повернись сюди та переходь до наступного рівня.</p>
+ <div class="embed-wrap"><iframe src="https://wordwall.net/uk/embed/3c11da369a484502bc1a9d3c302d2a30?themeId=1&templateId=5&fontStackId=0" title="Вправа Wordwall" allowfullscreen></iframe></div>
+ <p class="embed-note">Якщо вправа не відображається у вікні, відкрий її окремо: <a href="https://wordwall.net/uk/embed/3c11da369a484502bc1a9d3c302d2a30?themeId=1&templateId=5&fontStackId=0" target="_blank" rel="noopener">Wordwall</a>.</p>
+ <div class="row"><button type="button" onclick="document.getElementById('s1').classList.remove('active');document.getElementById('s2').classList.add('active');document.getElementById('progress').style.width='20%';if(typeof renderReview==='function'){renderReview();}document.getElementById('s2').scrollIntoView({behavior:'auto',block:'start'});">Я пригадав(ла)! Далі →</button></div>
+</section>
+
+<section class="stage panel" id="s2">
+ <div class="eyebrow">МІСІЯ 2 · МАТЕМАТИЧНИЙ СКАНЕР</div><h2 class="section">Перевір, чи готовий ти до випробувань</h2>
+ <p class="muted">Обери одну правильну відповідь у кожному завданні.</p>
+ <div id="reviewQuestions"></div><div class="row"><button type="button" onclick="document.getElementById('s2').classList.remove('active');document.getElementById('s3').classList.add('active');document.getElementById('progress').style.width='40%';document.getElementById('s3').scrollIntoView({behavior:'auto',block:'start'});">Перейти до випробувань →</button></div>
+</section>
+
+<section class="stage panel" id="s3">
+ <div class="eyebrow">МІСІЯ 3 · РІЗНОФОРМАТНІ ВИПРОБУВАННЯ</div><h2 class="section">Математичний полігон</h2>
+ <div class="q"><h3>1. Чи проходить графік через задану точку?</h3><p>Функція \(g(x)=\dfrac{x^2+2x-5}{x-1}\). Перевір точку A(0; 5).</p>
+ <div class="opts"><button class="opt" onclick="answer(this,false,'Ні. При x=0 значення g(0)=5, отже точка A(0;5) належить графіку.')">Не належить</button><button class="opt" onclick="answer(this,true,'Правильно! g(0)=(-5)/(-1)=5.')">Належить</button></div><div class="feedback"></div></div>
+ <div class="q"><h3>2. Знайди область визначення</h3><p>\(f(x)=\dfrac{3}{x^2-4}\)</p><div class="opts"><button class="opt" onclick="answer(this,false,'Знаменник не може дорівнювати нулю.')">Усі дійсні числа</button><button class="opt" onclick="answer(this,true,'Так! x²−4≠0, тому x≠−2 і x≠2.')">Усі дійсні, крім −2 і 2</button><button class="opt" onclick="answer(this,false,'Тут виключаються два значення: −2 і 2.')">x&gt;2</button></div><div class="feedback"></div></div>
+ <div class="q"><h3>3. Знайди значення функції</h3><p>\(f(x)=\begin{cases}5-x,&x<-2\\x^2,&-2\le x<1\\\sqrt{x},&x\ge1\end{cases}\). Знайди f(−2).</p>
+ <div class="opts"><button class="opt" onclick="answer(this,false,'Для x=−2 діє друга умова: −2≤x&lt;1.')">7</button><button class="opt" onclick="answer(this,true,'Правильно: f(−2)=(−2)²=4.')">4</button><button class="opt" onclick="answer(this,false,'Потрібно використати другу гілку функції.')">√2</button></div><div class="feedback"></div></div>
+ <div class="q" id="matchingTask">
+ <h3>4. Обери правильне правило</h3>
+ <p>Яке обмеження потрібно врахувати для кожного виразу?</p>
+ <div class="q mini-q"><strong>1. Раціональний дріб</strong> \(\dfrac{1}{x-4}\)
+  <div class="opts">
+   <button class="opt" onclick="answer(this,true,'Правильно! Знаменник не може дорівнювати нулю.')">Знаменник не дорівнює нулю</button>
+   <button class="opt" onclick="answer(this,false,'Перевір саме знаменник дробу.')">Підкореневий вираз невід’ємний</button>
+  </div><div class="feedback"></div>
+ </div>
+ <div class="q mini-q"><strong>2. Квадратний корінь</strong> \(\sqrt{x+3}\)
+  <div class="opts">
+   <button class="opt" onclick="answer(this,true,'Правильно! Підкореневий вираз має бути невід’ємним.')">Підкореневий вираз невід’ємний</button>
+   <button class="opt" onclick="answer(this,false,'Тут немає знаменника. Перевір умову для кореня.')">Знаменник не дорівнює нулю</button>
+  </div><div class="feedback"></div>
+ </div>
+ <div class="q mini-q"><strong>3. Многочлен</strong> \(x^2+5x-1\)
+  <div class="opts">
+   <button class="opt" onclick="answer(this,false,'Для многочлена немає таких обмежень.')">Знаменник не дорівнює нулю</button>
+   <button class="opt" onclick="answer(this,true,'Правильно! Многочлен визначений для всіх дійсних x.')">Усі дійсні значення \(x\)</button>
+  </div><div class="feedback"></div>
+ </div>
+</div>
+ <div class="q"><h3>5. Знайди помилку</h3><p>Учень стверджує, що область визначення \(y=\dfrac{1}{x+3}\) — усі дійсні числа. У чому помилка?</p><div class="opts"><button class="opt" onclick="answer(this,true,'Так! При x=−3 знаменник дорівнює нулю, тому це значення виключаємо.')">Не врахував, що x=−3 зануляє знаменник</button><button class="opt" onclick="answer(this,false,'Обмеження пов’язане саме зі знаменником.')">Забув перевірити знак чисельника</button></div><div class="feedback"></div></div>
+ <div class="row"><button type="button" onclick="document.getElementById('s3').classList.remove('active');document.getElementById('s4').classList.add('active');document.getElementById('progress').style.width='60%';document.getElementById('s4').scrollIntoView({behavior:'auto',block:'start'});">До графічної лабораторії →</button></div>
+</section>
+
+<section class="stage panel" id="s4">
+ <div class="eyebrow">МІСІЯ 4 · ГРАФІЧНА ЛАБОРАТОРІЯ</div><h2 class="section">Побудуй графік самостійно!</h2>
+ <p>Побудуй графік функції \(y=2x-1\), якщо \(D(f)=[-2;2]\). Самостійно обери два різні значення \(x\) з указаного проміжку, обчисли відповідні значення \(y\) та познач дві точки на координатній площині. Через них проведи пряму. Проміжок області визначення виділено кольором; поза ним графік будувати не потрібно.</p>
+ <svg id="graph" viewBox="0 0 600 600" role="img" aria-label="Координатна площина для побудови графіка"
+      style="display:block;width:min(100%,600px);height:auto;aspect-ratio:1/1;background:#f9fbff;border-radius:14px;margin:18px auto;touch-action:manipulation">
+      <rect x="60" y="60" width="480" height="480" fill="#f9fbff"/>
+      <rect x="60" y="60" width="144" height="480" fill="#e8eaf1"/>
+      <rect x="204" y="60" width="192" height="480" fill="#d9f5ef"/>
+      <rect x="396" y="60" width="144" height="480" fill="#e8eaf1"/>
+      <g stroke="#d3dbea" stroke-width="1">
+        <line x1="60" y1="60" x2="60" y2="540"/><line x1="108" y1="60" x2="108" y2="540"/><line x1="156" y1="60" x2="156" y2="540"/><line x1="204" y1="60" x2="204" y2="540"/><line x1="252" y1="60" x2="252" y2="540"/><line x1="300" y1="60" x2="300" y2="540"/><line x1="348" y1="60" x2="348" y2="540"/><line x1="396" y1="60" x2="396" y2="540"/><line x1="444" y1="60" x2="444" y2="540"/><line x1="492" y1="60" x2="492" y2="540"/><line x1="540" y1="60" x2="540" y2="540"/>
+        <line x1="60" y1="60" x2="540" y2="60"/><line x1="60" y1="108" x2="540" y2="108"/><line x1="60" y1="156" x2="540" y2="156"/><line x1="60" y1="204" x2="540" y2="204"/><line x1="60" y1="252" x2="540" y2="252"/><line x1="60" y1="300" x2="540" y2="300"/><line x1="60" y1="348" x2="540" y2="348"/><line x1="60" y1="396" x2="540" y2="396"/><line x1="60" y1="444" x2="540" y2="444"/><line x1="60" y1="492" x2="540" y2="492"/><line x1="60" y1="540" x2="540" y2="540"/>
+      </g>
+      <g stroke="#25324d" stroke-width="2">
+        <line x1="300" y1="52" x2="300" y2="548"/><line x1="52" y1="300" x2="548" y2="300"/>
+      </g>
+      <g fill="#25324d" font-family="Arial" font-size="14" text-anchor="middle">
+        <text x="60" y="322">-5</text><text x="108" y="322">-4</text><text x="156" y="322">-3</text><text x="204" y="322">-2</text><text x="252" y="322">-1</text><text x="300" y="322">0</text><text x="348" y="322">1</text><text x="396" y="322">2</text><text x="444" y="322">3</text><text x="492" y="322">4</text><text x="540" y="322">5</text>
+      </g>
+      <g fill="#25324d" font-family="Arial" font-size="14">
+        <text x="310" y="64">5</text><text x="310" y="112">4</text><text x="310" y="160">3</text><text x="310" y="208">2</text><text x="310" y="256">1</text><text x="310" y="352">-1</text><text x="310" y="400">-2</text><text x="310" y="448">-3</text><text x="310" y="496">-4</text><text x="310" y="544">-5</text>
+        <text x="558" y="304">x</text><text x="310" y="48">y</text>
+      </g>
+      <text x="300" y="80" fill="#237e74" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">D(f) = [−2; 2]</text>
+      <g id="graphDrawing"></g>
+    </svg>
+ <div class="graph-controls"><button class="secondary" onclick="undoPoint()">Скасувати останню</button><button class="secondary" onclick="resetGraph()">Очистити</button><button onclick="checkGraph()">Перевірити побудову</button></div>
+ <div class="feedback" id="graphFeedback" style="text-align:center"></div>
+ <div class="tile"><strong>Підказка:</strong> склади таблицю значень. Підстав кілька зручних значень \(x\) з проміжку \([-2;2]\). Кінці проміжку входять до області визначення, тому відповідні точки належать графіку.</div>
+ <div class="row" style="margin-top:16px"><button type="button" onclick="document.getElementById('s4').classList.remove('active');document.getElementById('s5').classList.add('active');document.getElementById('progress').style.width='80%';document.getElementById('s5').scrollIntoView({behavior:'auto',block:'start'});">До фінальної битви →</button></div>
+</section>
+
+<section class="stage panel" id="s5">
+ <div class="eyebrow">МІСІЯ 5 · ФІНАЛЬНА БИТВА</div><h2 class="section">Час показати, на що ти здатний!</h2>
+ <p class="muted">Виконай фінальний Kahoot. Якщо вбудована гра не відкривається, скористайся посиланням нижче.</p>
+ <div class="embed-wrap"><iframe src="https://kahoot.it/challenge/04445623?challenge-id=dd67730e-1e81-4cc8-a173-9f6a6658f355_1794161035800&amp;embed=true" title="Фінальна вікторина Kahoot" scrolling="no" allowfullscreen></iframe></div>
+ <p class="embed-note"><a href="https://kahoot.it/challenge/04445623?challenge-id=dd67730e-1e81-4cc8-a173-9f6a6658f355_1794161035800" target="_blank" rel="noopener">Відкрити Kahoot в окремій вкладці</a>.</p>
+ <div class="row"><button type="button" onclick="document.getElementById('s5').classList.remove('active');document.getElementById('s6').classList.add('active');document.getElementById('progress').style.width='100%';document.getElementById('s6').scrollIntoView({behavior:'auto',block:'start'});">Завершити місію →</button></div>
+</section>
+
+<section class="stage panel finish" id="s6">
+ <div class="medal">🏆</div><div class="eyebrow">МІСІЮ ЗАВЕРШЕНО</div><h2>Ти — дослідник функцій!</h2><p id="finalText" class="muted">Ти пройшов усі етапи математичної місії.</p>
+ <div class="score" id="scoreText">Молодець!</div>
+ <div class="q"><h3>Рефлексія</h3><p>Що сьогодні вдалося найкраще?</p><div class="opts"><button class="opt" onclick="reflect('Я впевнено знаходжу область визначення')">Область визначення</button><button class="opt" onclick="reflect('Я навчився/навчилася читати графіки')">Читати графіки</button><button class="opt" onclick="reflect('Я можу побудувати графік за точками')">Будувати графіки</button><button class="opt" onclick="reflect('Мені ще потрібно потренуватися')">Ще потрібно потренуватися</button></div><div class="feedback" id="reflection"></div></div>
+ <button class="secondary" onclick="location.reload()">Пройти місію ще раз</button>
+</section>
+</main>
+<footer>MATH QUEST 09 · Навчайся, досліджуй, перемагай!</footer>
+<script>
+(function(){
+"use strict";
+let points=0, player="дослідник", selectedMatch=null;
+const matched=new Set();
+function el(id){return document.getElementById(id)}
+function showStage(n){
+ document.querySelectorAll(".stage").forEach(s=>s.classList.remove("active"));
+ el("intro").style.display="none";
+ const target=el("s"+n);
+ if(target){target.classList.add("active");target.scrollIntoView({behavior:"auto",block:"start"});}
+ el("progress").style.width=(((n-1)/5)*100)+"%";
+ if(n===2) renderReview();
+ if(n===4) drawGraph();
+ if(n===5 && window.MathJax?.typesetPromise) window.MathJax.typesetPromise([el("s5")]);
+ if(n===6){
+  el("progress").style.width="100%";
+  el("finalText").textContent=player+", ти пройшов(ла) усі етапи математичної місії.";
+  el("scoreText").textContent="Правильних відповідей: "+points;
+ }
+}
+window.startGame=function(){
+ player=el("playerName").value.trim()||"дослідник";
+ el("playerTag").textContent="Гравець: "+player;
+ showStage(1);
+};
+window.go=showStage;
+window.answer=function(btn,ok,msg){
+ const box=btn.closest(".q");
+ if(!box||box.dataset.done==="1")return;
+ box.dataset.done="1";
+ box.querySelectorAll("button.opt").forEach(b=>b.disabled=true);
+ btn.classList.add(ok?"correct":"wrong");
+ const feedback=box.querySelector(".feedback");
+ if(feedback)feedback.textContent=msg;
+ if(ok)points++;
+};
+const review=[
+ ["Що називають областю визначення функції?",["Усі допустимі значення аргументу x","Усі значення y","Лише нулі функції"],0],
+ ["Що таке графік функції?",["Множина точок (x;y), координати яких пов’язані функцією","Тільки пряма","Таблиця чисел"],0],
+ ["Яка область визначення y=4x+7?",["x>0","Усі дійсні числа","x≠7"],1],
+ ["Яке значення x виключаємо для y=2/(x−5)?",["2","−5","5"],2],
+ ["Що потрібно для y=√(x+2)?",["x≥−2","x≤−2","x≠−2"],0]
+];
+function renderReview(){
+ const root=el("reviewQuestions");
+ if(root.dataset.ready)return;
+ root.dataset.ready="1";
+ review.forEach((q,i)=>{
+  const d=document.createElement("div");d.className="q";
+  const title=document.createElement("h3");title.textContent=(i+1)+". "+q[0];d.appendChild(title);
+  const opts=document.createElement("div");opts.className="opts";
+  q[1].forEach((a,j)=>{
+   const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=a;
+   b.addEventListener("click",()=>window.answer(b,j===q[2],j===q[2]?"Правильно!":"Спробуй пригадати означення та умови існування виразу."));
+   opts.appendChild(b);
+  });
+  d.appendChild(opts);const f=document.createElement("div");f.className="feedback";d.appendChild(f);root.appendChild(d);
+ });
+ if(window.MathJax?.typesetPromise)window.MathJax.typesetPromise([root]);
+}
+window.renderReview=renderReview;
+window.chooseMatch=function(btn){
+ if(btn.classList.contains("match-left")){
+  selectedMatch=btn.dataset.id;
+  document.querySelectorAll(".match-left").forEach(b=>{if(!matched.has(b.dataset.id))b.classList.remove("correct")});
+  btn.classList.add("correct");return;
+ }
+ if(!selectedMatch){el("matchFeedback").textContent="Спочатку обери вираз ліворуч.";return;}
+ const id=btn.dataset.id;
+ if(id===selectedMatch){
+  matched.add(id);btn.classList.add("correct");
+  const left=document.querySelector('.match-left[data-id="'+id+'"]');
+  if(left){left.classList.add("correct");left.disabled=true;}btn.disabled=true;
+  el("matchFeedback").textContent="Правильно! Знайдено пар: "+matched.size+"/3";
+  if(matched.size===3){points++;el("matchFeedback").textContent="Усі три пари правильні! +1 бал.";}
+ }else{
+  btn.classList.add("wrong");el("matchFeedback").textContent="Не зовсім. Пригадай умову існування відповідного виразу.";
+  setTimeout(()=>btn.classList.remove("wrong"),700);
+ }
+ selectedMatch=null;
+ document.querySelectorAll(".match-left").forEach(b=>{if(!matched.has(b.dataset.id))b.classList.remove("correct")});
+};
+window.reflect=function(t){el("reflection").textContent=t;};
+let chosen=[];
+const svgNS="http://www.w3.org/2000/svg";
+function svgNode(name,attrs){
+ const n=document.createElementNS(svgNS,name);
+ Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));
+ return n;
+}
+function drawGraph(){
+ const layer=el("graphDrawing");if(!layer)return;
+ layer.replaceChildren();
+ if(chosen.length===2){
+  const a=chosen[0],b=chosen[1];
+  const line=svgNode("line",{x1:60+(a.x+5)*48,y1:60+(5-a.y)*48,x2:60+(b.x+5)*48,y2:60+(5-b.y)*48,stroke:"#078eae","stroke-width":"4","stroke-linecap":"round"});
+  layer.appendChild(line);
+ }
+ chosen.forEach(p=>{
+  layer.appendChild(svgNode("circle",{cx:60+(p.x+5)*48,cy:60+(5-p.y)*48,r:8,fill:"#e83e9c",stroke:"#fff","stroke-width":"2"}));
+  const label=svgNode("text",{x:60+(p.x+5)*48+10,y:60+(5-p.y)*48-10,fill:"#25324d","font-size":"13","font-family":"Arial"});
+  label.textContent="("+p.x+"; "+p.y+")";layer.appendChild(label);
+ });
+}
+function graphClick(evt){
+ if(chosen.length>=2)return;
+ const svg=el("graph"),pt=svg.createSVGPoint();pt.x=evt.clientX;pt.y=evt.clientY;
+ const p=pt.matrixTransform(svg.getScreenCTM().inverse());
+ const x=Math.round((p.x-60)/48-5),y=Math.round(5-(p.y-60)/48);
+ if(p.x<60||p.x>540||p.y<60||p.y>540||x< -2||x>2||y< -5||y>5)return;
+ if(chosen.some(q=>q.x===x)){el("graphFeedback").textContent="Обери інше значення x.";return;}
+ chosen.push({x,y});drawGraph();
+ el("graphFeedback").textContent="Позначено точок: "+chosen.length+"/2. "+(chosen.length===2?"Натисни «Перевірити побудову».":"Обери ще одну точку з іншим x.");
+}
+window.undoPoint=function(){chosen.pop();drawGraph();el("graphFeedback").textContent="Позначено точок: "+chosen.length+"/2";};
+window.resetGraph=function(){chosen=[];drawGraph();el("graphFeedback").textContent="";};
+window.checkGraph=function(){
+ const f=el("graphFeedback");
+ if(chosen.length!==2){f.textContent="Для побудови прямої познач дві точки.";return;}
+ const wrong=chosen.filter(p=>p.y!==2*p.x-1);
+ if(!wrong.length){f.textContent="Чудово! Обидві точки належать графіку y = 2x − 1. Побудову виконано правильно.";points+=2;}
+ else f.textContent="Є помилка. Для кожної точки перевір обчислення y = 2x − 1. Спробуй ще раз.";
+};
+document.addEventListener("DOMContentLoaded",()=>{
+ const svg=el("graph");if(svg)svg.addEventListener("click",graphClick);
+ // Ensure MathJax processes all authored formulas after the page is ready.
+ if(window.MathJax?.typesetPromise)window.MathJax.typesetPromise();
+});
+})();
+</script>
+</body></html>
